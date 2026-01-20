@@ -34,12 +34,12 @@ from docopt import docopt
 def main(version):
     args = docopt(__doc__, version=version)
     match args:
-        case {"init": True, "<dir>": dir, "--interactive": interactive, "--silent": silent}:
+        case {"init": True, "<dir>": dir, "--non-interactive": non_interactive, "--silent": silent}:
             from docs_agent.setup import main as setup
-            setup(directory=dir or ".", interactive=interactive, silent=silent)
-        case {"add": True, "<tool>": tools, "<version>": versions, "--interactive": interactive, "--silent": silent}:
+            setup(directory=dir or ".", non_interactive=non_interactive, silent=silent)
+        case {"add": True, "<tool>": tools, "<version>": versions, "--non-interactive": non_interactive, "--silent": silent}:
             from docs_agent.add_tool import main as add_tool
-            add_tool(tools=tools, versions=versions, interactive=interactive, silent=silent)
+            add_tool(tools=tools, versions=versions, non_interactive=non_interactive, silent=silent)
         case {"config": True, "<option>": option, "<value>": value}:
             from docs_agent.config import get_or_set_option as configure
             configure(option=option, value=value)
