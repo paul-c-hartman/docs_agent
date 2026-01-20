@@ -56,5 +56,5 @@ def main(version):
             from docs_agent.update import main as update
             update(force=force, silent=silent, verbose=verbose)
         case _:
-            print("Invalid command. Use --help for usage information.")
+            print("Given command is either invalid or not yet implemented. Debug info: ", args)
 
