@@ -1,5 +1,5 @@
 [project]
-name = "docs-agent"
+name = "docs_agent"
 version = "0.0.1"
 description = "The docs agent finds, pulls and learns the documentation for your tools, libraries and programming languages so that you don't have to. Instead of switching tabs to Google (or your search engine of choice), ask docs about the tools in your project."
 readme = "README.md"
@@ -8,4 +8,8 @@ dependencies = [
     "chromadb>=1.4.1",
     "docopt>=0.6.2",
     "ollama>=0.6.1",
+    "platformdirs>=4.5.1",
 ]
+
+[project.scripts]
+docs = "docs_agent.__main__:main"
