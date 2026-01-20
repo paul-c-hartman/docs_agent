@@ -38,8 +38,8 @@ def main(version):
             from docs_agent.setup import main as setup
             setup(directory=dir or ".", non_interactive=non_interactive, silent=silent)
         case {"add": True, "<tool>": tools, "<version>": versions, "--non-interactive": non_interactive, "--silent": silent}:
-            from docs_agent.add_tool import main as add_tool
-            add_tool(tools=tools, versions=versions, non_interactive=non_interactive, silent=silent)
+            from docs_agent.add_element import main as add_element
+            add_element(tools=tools, versions=versions, non_interactive=non_interactive, silent=silent)
         case {"config": True, "<option>": option, "<value>": value}:
             from docs_agent.config import get_or_set_option as configure
             configure(option=option, value=value)
@@ -47,7 +47,7 @@ def main(version):
             from docs_agent.agent import ask as ask
             ask(prompt=prompt, stream=stream)
         case {"chat": True}:
-            from docs_agent.chat import chat as chat
+            from docs_agent.agent import chat as chat
             chat()
         case {"pull": True, "--force": force, "--silent": silent, "--verbose": verbose}:
             from docs_agent.update import main as update
