@@ -53,4 +53,5 @@ def main(directory=".", non_interactive=False, silent=False):
     run_silently = silent
 
     ensure_directory(directory)
+    # TODO: Ensure database in .docs/chromadb/
     print("Docs agent setup complete.")
