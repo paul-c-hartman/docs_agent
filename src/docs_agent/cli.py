@@ -1,5 +1,5 @@
 """
-Docs agent. 
+Docs agent.
 
 Usage:
   docs init [<dir>] [(-i | --interactive) | (-n | --non-interactive [--silent])]
@@ -29,32 +29,60 @@ Options:
   --stream                     Stream the Docs agent's response.
   --force                      Re-download all documentation, not just version updates.
 """
+
 from docopt import docopt
+from docs_agent.helpers.log import logger
+
 
 def main(version):
     args = docopt(__doc__, version=version)
+    logger.debug(
+        "Received CLI command with args: %s", {k: v for k, v in args.items() if v}
+    )
     match args:
-        case {"init": True, "<dir>": dir, "--non-interactive": non_interactive, "--silent": silent}:
+        case {
+            "init": True,
+            "<dir>": dir,
+            "--non-interactive": non_interactive,
+            "--silent": silent,
+        }:
             from docs_agent.setup import main as setup
+
             setup(directory=dir or ".", non_interactive=non_interactive, silent=silent)
-        case {"add": True, "<tool>": tools, "<version>": versions, "--non-interactive": non_interactive, "--silent": silent}:
+        case {
+            "add": True,
+            "<tool>": tools,
+            "<version>": versions,
+            "--non-interactive": non_interactive,
+            "--silent": silent,
+        }:
             from docs_agent.add_element import main as add_element
-            add_element(tools=tools, versions=versions, non_interactive=non_interactive, silent=silent)
+
+            add_element(
+                tools=tools,
+                versions=versions,
+                non_interactive=non_interactive,
+                silent=silent,
+            )
         case {"config": True, "<option>": option, "<value>": value}:
             from docs_agent.config import get_or_set_option as configure
+
             configure(option=option, value=value)
         case {"ask": True, "<prompt>": prompt, "--stream": stream}:
             from docs_agent.agent import ask as ask
+
             ask(prompt=prompt, stream=stream)
         case {"chat": True}:
             from docs_agent.agent import chat as chat
+
             chat()
         case {"pull": True, "--force": force, "--silent": silent, "--verbose": verbose}:
             from docs_agent.update import main as update
+
             update(force=force, silent=silent, verbose=verbose)
         case {"update": True, "--force": force, "--silent": silent, "--verbose": verbose}:
             from docs_agent.update import main as update
             update(force=force, silent=silent, verbose=verbose)
         case _:
-            print("Given command is either invalid or not yet implemented. Debug info: ", args)
-
+            logger.error("Given command is either invalid or not yet implemented.")
+            logger.debug("Debug info: %s", args)
