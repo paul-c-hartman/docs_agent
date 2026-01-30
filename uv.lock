@@ -267,7 +267,7 @@ wheels = [
 [[package]]
 name = "docs-agent"
 version = "0.0.1"
-source = { virtual = "." }
+source = { editable = "." }
 dependencies = [
     { name = "chromadb" },
     { name = "docopt-ng" },
