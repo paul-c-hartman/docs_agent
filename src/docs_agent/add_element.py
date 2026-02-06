@@ -1,9 +1,11 @@
 import requests
 from docs_agent.helpers.log import logger
+from docs_agent.helpers.elements import Element
 
 
 def main(tools=[], versions=[], noninteractive=False, silent=False):
     """Main add_element function. Invoked by the CLI handler."""
+
     # For each tool and version, add the element to the local docs.
     # TODO: for now, `version` is a URL/path to the documentation
     for i, tool in enumerate(tools):
@@ -14,18 +16,15 @@ def main(tools=[], versions=[], noninteractive=False, silent=False):
             logger.debug("Intelligent version detection not yet implemented.")
             continue
         try:
-            _doc_text = obtain_text(version)
-            # Here you would add logic to save doc_text to the appropriate location
-            logger.debug(f"Obtained documentation for '{tool}' from '{version}'.")
-            if not silent:
-                logger.info(
-                    f"Successfully added documentation for '{tool}' from '{version}'."
-                )
+            # _doc_text = obtain_text(version)
+            doc_text = "Text retrieval not yet implemented"
+            logger.debug(f"Obtained documentation for '{tool}-{version}'.")
+            logger.info(f"Successfully added documentation for '{tool}-{version}'.") if not silent else None
+            element = Element(name=tool, version=version, content=doc_text)
+            element.save()
+
         except Exception as e:
-            if not silent:
-                logger.error(
-                    f"Failed to add documentation for '{tool}' from '{version}': {e}"
-                )
+            logger.error(f"Failed to add documentation for '{tool}-{version}': {e}") if not silent else None
 
 
 def obtain_text(url_or_path):
