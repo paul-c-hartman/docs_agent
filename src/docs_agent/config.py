@@ -121,10 +121,12 @@ class Config:
 
     def save(self, config_file=os.path.join(".docs", "config.yaml")):
         """Save the given configuration to the local config file."""
+        # Remove any settings defined in defaults or global config file, only save those defined in local config file or set at runtime
+        local_settings = {k: v["value"] for k, v in self.settings.items() if v["defined_in"] in ["local config file", "set at runtime", "from dictionary"]}
         logger.debug(f"Attempting to save settings to file: {config_file}...")
         with open(config_file, "w") as f:
             try:
-                yaml.safe_dump(self.to_dict(), f)
+                yaml.safe_dump(local_settings, f)
                 logger.debug("Settings saved successfully")
             except yaml.YAMLError as e:
                 logger.error(f"Settings could not be saved to {config_file}: {e}")
@@ -151,7 +153,7 @@ def get_or_set_option(option, value=None, config_file=os.path.join(".docs", "con
     if value is not None:
         source_desc = "local config file"
         settings.set(option, value, source_desc=source_desc)
-        settings.save()
+        settings.save(config_file=config_file)
         logger.info(f"Set {option} to {value} (in {source_desc}).")
     else:
         # Get the option
