@@ -21,7 +21,7 @@ def init_client():
     config = settings
     ollama_url = config.get("OLLAMA_URL")
     logger.debug(f"Initializing Ollama at {ollama_url}...")
-    ollama_client = ollama.Client(host=ollama_url)
+    ollama_client = ollama.Client(host=ollama_url, timeout=2.0)
     # Ensure models are available
     chat_model = config.get("CHAT_MODEL")
     embedding_model = config.get("EMBEDDING_MODEL")
