@@ -35,7 +35,7 @@ from docs_agent.helpers.log import logger
 
 
 def main(version):
-    args = docopt(__doc__, version=version)
+    args = docopt(__doc__, version=version) # type: ignore
     logger.debug(
         "Received CLI command with args: %s", {k: v for k, v in args.items() if v}
     )
@@ -53,7 +53,7 @@ def main(version):
             "add": True,
             "<tool>": tools,
             "<version>": versions,
-            "--non-interactive": non_interactive,
+            "--non-interactive": noninteractive,
             "--silent": silent,
         }:
             from docs_agent.add_element import main as add_element
@@ -61,7 +61,7 @@ def main(version):
             add_element(
                 tools=tools,
                 versions=versions,
-                non_interactive=non_interactive,
+                noninteractive=noninteractive,
                 silent=silent,
             )
         case {"config": True, "<option>": option, "<value>": value}:
