@@ -1,7 +1,7 @@
 import ollama
 import functools
 import time
-from docs_agent.config import load_config
+from docs_agent.config import settings
 from docs_agent.helpers.filesize import filesize_to_english
 from docs_agent.helpers.log import logger
 
@@ -18,7 +18,7 @@ def _is_model_available(client, model_name):
 @functools.cache  # Initialize client only once
 def init_client():
     """Initialize Ollama client and ensure models are available."""
-    config = load_config()
+    config = settings
     ollama_url = config.get("OLLAMA_URL")
     logger.debug(f"Initializing Ollama at {ollama_url}...")
     ollama_client = ollama.Client(host=ollama_url)
@@ -53,9 +53,9 @@ class Conversation:
     def __init__(self, system_prompt=None, model=None, **kwargs):
         """Creates a conversation. Optionally specify a system prompt and model. Additional arguments are passed directly to the Ollama client."""
         self.client, self.config = init_client()
-        system_prompt = system_prompt or self.config["SYSTEM_PROMPT"]
+        system_prompt = system_prompt or self.config.get("SYSTEM_PROMPT")
         self.messages = [{"role": "system", "content": system_prompt}]
-        self.model = model or self.config["CHAT_MODEL"]
+        self.model = model or self.config.get("CHAT_MODEL")
         self.args = kwargs
 
     def add_user_message(self, content):

@@ -38,7 +38,7 @@ def ensure_directory(directory="."):
         print_silent(f"Local elements file already exists: {elements_path}")
     
     # Create ChromaDB directory
-    chromadb_dir = os.path.join(directory, settings['CHROMADB_DIR'])
+    chromadb_dir = os.path.join(directory, settings.get("CHROMADB_DIR"))
     if not os.path.exists(chromadb_dir):
         os.makedirs(chromadb_dir)
         print_silent(f"Created ChromaDB directory: {chromadb_dir}")
