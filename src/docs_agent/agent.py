@@ -1,3 +1,5 @@
+import sys
+
 import ollama
 import functools
 import time
@@ -79,36 +81,44 @@ class Conversation:
             yield chunk.message["content"]
 
 
-def ask(prompt="", stream=False):
+def ask(prompt="", stream=False, out_stream=sys.stdout):
     """
     Ask function for the docs agent. Invoked by the CLI handler.
     Supports streaming responses.
     """
     conversation = Conversation()
     conversation.add_user_message(prompt)
+    response = ""
     if stream:
         logger.debug("Streaming response...")
         for chunk in conversation.stream_response():
-            print(chunk, end="", flush=True)
-        print()  # Newline after streaming
+            print(chunk, end="", flush=True, file=out_stream)
+            response += chunk
+        print(file=out_stream)  # Newline after streaming
     else:
         logger.debug("Getting full response...")
         response = conversation.get_response()
         logger.debug("Got response:")
-        print(response)
+        print(response, file=out_stream)
+    return response
 
 
-def chat():
+def chat(in_stream=sys.stdin, out_stream=sys.stdout):
     """Chat function for the docs agent. Invoked by the CLI handler."""
     conversation = Conversation()
     logger.info("Starting chat session with the Docs agent. Type '/done' to quit.")
-    while True:
-        user_input = input("> ")
-        if user_input.strip().lower() == "/done":
-            logger.info("Ending chat session.")
-            break
-        conversation.add_user_message(user_input)
-        for chunk in conversation.stream_response():
-            print(chunk, end="", flush=True)
-        print()  # Newline after streaming
-        print()  # Extra newline for readability
+    original_stdin = sys.stdin
+    try:
+        sys.stdin = in_stream
+        while True:
+            user_input = input("> ")
+            if user_input.strip().lower() == "/done":
+                logger.info("Ending chat session.")
+                break
+            conversation.add_user_message(user_input)
+            for chunk in conversation.stream_response():
+                print(chunk, end="", flush=True, file=out_stream)
+            print(file=out_stream)  # Newline after streaming
+            print(file=out_stream)  # Extra newline for readability
+    finally:
+        sys.stdin = original_stdin
