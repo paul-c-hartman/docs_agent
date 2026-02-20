@@ -11,7 +11,7 @@ def _is_model_available(client, model_name):
     models = [model["model"] for model in client.list()["models"]]
     model_name = f"{model_name}:latest" if ":" not in model_name else model_name
     model_available = model_name in models
-    logger.debug(f"Model availability for '{model_name}': {model_available}")
+    logger.debug(f"Model '{model_name}' {'is' if model_available else 'is not'} available locally")
     return model_available
 
 
