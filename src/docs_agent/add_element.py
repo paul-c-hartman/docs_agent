@@ -7,7 +7,6 @@ def main(tools=[], versions=[], noninteractive=False, silent=False):
     """Main add_element function. Invoked by the CLI handler."""
 
     # For each tool and version, add the element to the local docs.
-    # TODO: for now, `version` is a URL/path to the documentation
     for i, tool in enumerate(tools):
         version = versions[i] if i < len(versions) else None
         if not version:
@@ -25,7 +24,6 @@ def main(tools=[], versions=[], noninteractive=False, silent=False):
 
         except Exception as e:
             logger.error(f"Failed to add documentation for '{tool}-{version}': {e}") if not silent else None
-
 
 def obtain_text(url_or_path):
     """Obtain text from a URL or file path."""
